@@ -2,20 +2,20 @@ CXX            	= /usr/bin/g++
 CPPFLAGS      	= -g -c
 LDFLAGS       	= -g
 OMNI_HOME     	= /root/Downloads/omniORB-4.2.1
-OMNIIDL       	= $(OMNI_HOME)/bin/omniidl
+OMNIIDL       	= $(OMNI_HOME)/build/bin/omniidl
 LIBS          	= -lomniORB4 -lomnithread -lomniDynamic4
-OBJECTS       	= echoSK.o server.o
+OBJECTS       	= echo_callbackSK.o server.o
 IDL_DIR		= ../idl
-IDL_FILE	= $(IDL_DIR)/callback.idl
+IDL_FILE	= $(IDL_DIR)/echo_callback.idl
 
 all server: $(OBJECTS)
-	$(CXX) $(LDFLAGS) -o server server.o echoSK.o $(LIBS)
+	$(CXX) $(LDFLAGS) -o server server.o echo_callbackSK.o $(LIBS)
 
 server.o: server.cc
 	$(CXX) $(CPPFLAGS) server.cc -I.
 
-echoSK.o: echoSK.cc echo.hh
-	$(CXX) $(CPPFLAGS) echoSK.cc -I.
+echo_callbackSK.o: echo_callbackSK.cc echo_callback.hh
+	$(CXX) $(CPPFLAGS) echo_callbackSK.cc -I.
 
 echoSK.cc: $(IDL_FILE)
 	$(OMNIIDL) -bcxx $(IDL_FILE)
