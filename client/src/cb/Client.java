@@ -17,8 +17,9 @@ import org.omg.PortableServer.POA;
 /**
  * Client.java
  *
- *
- * Created: Mon Sep 3 19:28:34 2001
+ * Obtains a reference of a remote object and creates also a POA where the Server can "callback" the client
+ * The callback methode gets invoked every 4 seconds and prints a message out
+ * Created: Mon Sep 3 19:28:34 2008
  *
  * @author Nicolas Noffke, Lukas Mayer
  */
@@ -35,22 +36,26 @@ public class Client extends ClientCallbackPOA
                 + message + '<');
     }
 
+    /**
+    * obtains a reference over a naming service and also starts a POA 
+    * "registers" the callback at the server and shuts the server down if a user input happens
+    */
     public static void main (String[] args) throws Exception
     {
-	//Property-File loeschen, da ein Nameing-Service verwendet wird
-        org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init (args, null); //adresse des naming-service
+        org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init (args, null); //args = address of the naming service
 
-	Object o =orb.resolve_initial_references("NameService");
-	NamingContextExt rootContext = NamingContextExtHelper.narrow(o);
+	Object o = orb.resolve_initial_references("NameService"); 
+	NamingContextExt rootContext = NamingContextExtHelper.narrow(o); //casting
 	NameComponent[] name = new NameComponent[2];
 	name[0] = new NameComponent("test","my_context");
 	name[1] = new NameComponent("Server", "Object");
 
-        Server server = ServerHelper.narrow (rootContext.resolve(name));
+        Server server = ServerHelper.narrow (rootContext.resolve(name)); //obtaining a reference
 
         POA root_poa = (POA) orb.resolve_initial_references ("RootPOA");
-        root_poa.the_POAManager().activate();
+        root_poa.the_POAManager().activate(); //starting the root POA
 
+	//Creating and casting a new Callback-Object
         CallBack ccb = ClientCallbackHelper.narrow(root_poa.servant_to_reference(new Client()));
 	server.register(ccb, "every 4 seconds", 4);
 

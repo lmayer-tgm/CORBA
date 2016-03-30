@@ -141,7 +141,7 @@ server_i::shutdown()
 int main(int argc, char** argv)
 {
   try {
-    orb = CORBA::ORB_init(argc, argv);//adresse des naming-services
+    orb = CORBA::ORB_init(argc, argv);
 
     {
       CORBA::Object_var obj = orb->resolve_initial_references("RootPOA");
@@ -153,6 +153,7 @@ int main(int argc, char** argv)
       obj = myserver->_this();             // *implicit activation*
       myserver->_remove_ref();
 
+      //checks if the object could be exported to th nameing-service
       if(!bindObjectToName(orb, obj))
       	return 1;
 
