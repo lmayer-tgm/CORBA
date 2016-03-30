@@ -57,7 +57,7 @@ public class Client extends ClientCallbackPOA
 
 	//Creating and casting a new Callback-Object
         CallBack ccb = ClientCallbackHelper.narrow(root_poa.servant_to_reference(new Client()));
-	server.register(ccb, "every 4 seconds", 4);
+	server.register(ccb, "worked! methods gets invoked every 4 seconds", 4);
 
 	while (System.in.read() == '\n'){
         	server.shutdown();
