@@ -17,7 +17,7 @@ server.o: server.cc
 echo_callbackSK.o: echo_callbackSK.cc echo_callback.hh
 	$(CXX) $(CPPFLAGS) echo_callbackSK.cc -I.
 
-echoSK.cc: $(IDL_FILE)
+echo_callbackSK.cc: $(IDL_FILE)
 	$(OMNIIDL) -bcxx $(IDL_FILE)
 
 run: server
